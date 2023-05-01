@@ -23,3 +23,17 @@ router.post("/notes",function(req, res){
         })
     })
 })
+
+router.delete("/notes/:id", (req, res) => {
+	fs.readFile("db/db.json", (err, data) => {
+		if (err) throw err;
+		let json = JSON.parse(data);
+		let notes = json.filter((note) => note.id !== req.params.id);
+		console.log(notes);
+		fs.writeFile("db/db.json", JSON.stringify(notes), function (err) {
+			if (err) throw err;
+			res.redirect("/notes");
+		});
+	});
+});
+module.exports = router;
